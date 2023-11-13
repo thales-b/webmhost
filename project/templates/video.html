@@ -1,0 +1,65 @@
+{% extends 'layout.html' %} {% block title %} {{ video.title }} - Webmhost {%
+    endblock %} {% block content %}
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card mb-3">
+          <div class="card-body"></div>
+          <video class="card-img-top" controls>
+            <source
+              src="{{ url_for('static', filename='uploads/'+ video.filename) }}"
+              type="video/webm"
+            />
+          </video>
+        </div>
+        <h5 class="card-title">{{ video.title }}</h5>
+        <p class="card-text">{{ video.description }}</p>
+        <p class="card-text">
+          <small class="text-muted">Category: {{ video.category }}</small>
+        </p>
+        <p class="card-text">
+          <small class="text-muted"
+            >Upload Date: {{ video.upload_date.strftime('%Y-%m-%d') }}</small
+          >
+        </p>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Comments</h5>
+            <div class="mb-3">
+              <form
+                action="{{ url_for('video', video_filename=video.filename) }}"
+                method="POST"
+              >
+                <textarea
+                  class="form-control"
+                  name="content"
+                  id="content"
+                  placeholder="Add a comment"
+                  rows="3"
+                ></textarea>
+                <button type="submit" class="btn btn-primary mt-2">Submit</button>
+              </form>
+            </div>
+            {% for comment in video.comments %}
+            <div class="card mb-2">
+              <div class="card-body">
+                <p class="card-text">{{ comment.content }}</p>
+                <small class="text-muted">Posted by {{ comment.user.username }} on {{ comment.date.strftime('%d/%m/%Y') }}</small>            {% if current_user and current_user == comment.user %}
+                  <a href="{{ url_for('delete_comment', comment_id=comment.id) }}" class="btn btn-link text-danger float-right">Delete</a>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Video Details</h5>
+            <p class="card-text">Views: {{ video.views }}</p>
+            <a href="{{ url_for('static', filename='uploads/' + video.filename) }}" download class="btn btn-primary mt-2">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}   

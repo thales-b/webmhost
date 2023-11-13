@@ -1,0 +1,94 @@
+{% extends 'layout.html' %} {% block title %} {{ user.username }} - User Page {%
+    endblock %} {% block content %}
+    <div class="container mt-4">
+      <h1 class="mb-4">{{ user.username }}'s Videos</h1>
+    
+      <div class="row mt-4">
+        {% for video in videos %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <a href="{{ url_for('video', video_filename=video.filename)  }}">
+              <img
+                src="{{url_for('static', filename=video.thumbnail_filename)}}"
+                class="card-img-top"
+                alt="Video Thumbnail"
+              />
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">{{ video.title }}</h5>
+              <p class="card-text">Views: {{ video.views }}</p>
+              <a
+                href="{{ url_for('video', video_filename=video.filename) }}"
+                class="btn btn-primary"
+                >Watch Video</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Video History</h5>
+              <div
+                id="videoHistoryCarousel"
+                class="carousel slide"
+                data-bs-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  {% for video in
+                  videos %}
+                  <div
+                    class="carousel-item {% if loop.index == 1 %}active{% endif %}"
+                  >
+                    <div class="card">
+                      <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">
+                          {{ video.upload_date.strftime('%Y-%m-%d') }}
+                        </h6>
+                        <h5 class="card-title">{{ video.title }}</h5>
+                        <p class="card-text">{{ video.description }}</p>
+                        <a
+                          href="{{ url_for('video', video_filename=video.filename) }}"
+                          class="btn btn-primary"
+                          >Watch Video</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#videoHistoryCarousel"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#videoHistoryCarousel"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}

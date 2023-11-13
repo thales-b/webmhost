@@ -1,0 +1,20 @@
+{% extends 'layout.html' %} 
+{% block title %} WebmHost {% endblock %} 
+{% block content %}
+<h1>Gallery</h1>
+<div class="row">
+  {% for video in videos %}
+  <div class="col-md-3 mb-3">
+    <div class="card">
+        <a href="{{ url_for('video', video_filename=video.filename) }}">
+            <img src="{{url_for('static', filename=video.thumbnail_filename)}}" class="card-img-top" style="height: 150px; object-fit: cover;">
+        </a>
+      <div class="card-body">
+        <h5 class="card-title">{{ video.title }}</h5>
+        <p class="card-text">{{ video.views }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
